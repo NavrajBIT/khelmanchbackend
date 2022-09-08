@@ -29,12 +29,12 @@ myContract = w3.eth.contract(address=contract_address, abi=abi)
 def add_creator(_userName, _profilepic):
     print("Calling contract---------------------")
     nonce = w3.eth.get_transaction_count(public_key)
-    add_user_tx = myContract.functions.addCreator(
+    add_creator_tx = myContract.functions.addCreator(
         _userName, _profilepic).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
     signed_tx = w3.eth.account.sign_transaction(
-        add_user_tx, private_key=private_key)
-    add_user_tx_data = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    w3.eth.wait_for_transaction_receipt(add_user_tx_data)
+        add_creator_tx, private_key=private_key)
+    add_creator_tx_data = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+    w3.eth.wait_for_transaction_receipt(add_creator_tx_data)
     return True
 
 
@@ -63,8 +63,8 @@ def add_profile(
         _description).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
     signed_tx = w3.eth.account.sign_transaction(
         add_profile_tx, private_key=private_key)
-    add_club_tx_data = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    w3.eth.wait_for_transaction_receipt(add_club_tx_data)
+    add_profile_tx_data = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+    w3.eth.wait_for_transaction_receipt(add_profile_tx_data)
     return True
 
 
@@ -83,6 +83,7 @@ def upload_video(
         _skillName).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
     signed_tx = w3.eth.account.sign_transaction(
         upload_video_tx, private_key=private_key)
-    add_club_tx_data = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    w3.eth.wait_for_transaction_receipt(add_club_tx_data)
+    upload_video_tx_data = w3.eth.send_raw_transaction(
+        signed_tx.rawTransaction)
+    w3.eth.wait_for_transaction_receipt(upload_video_tx_data)
     return True

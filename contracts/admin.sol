@@ -84,43 +84,4 @@ contract Admin {
     ) public onlyOwner {
         khelManch.uploadVideo(_profileId, _videoLink, _description, _skillName);
     }
-
-    function getProfileByPersonalDetails(uint256 _id)
-        public
-        view
-        returns (
-            string memory name,
-            uint256 age,
-            string memory gender,
-            string memory fatherName,
-            string memory motherName,
-            string memory _Address
-        )
-    {
-        return khelManch.getProfileByPersonalDetails(_id);
-    }
-
-    function getProfileBySkill(uint256 _id)
-        public
-        view
-        returns (
-            string memory imgHash,
-            string memory skillName,
-            string memory description
-        )
-    {
-        return khelManch.getProfileBySkill(_id);
-    }
-
-    function getUploadedVideo(uint256 _id)
-        public
-        view
-        returns (
-            string memory videoLink,
-            string memory description,
-            string memory skillName
-        )
-    {
-        return khelManch.getUploadedVideo(_id);
-    }
 }

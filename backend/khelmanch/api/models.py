@@ -4,9 +4,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Creator(models.Model):
     name = models.CharField(max_length=50)
-    profilepic = models.CharField(max_length=200)
-    description = models.TextField()
-    ethAddress = models.CharField(max_length=100)
+    description = models.CharField(max_length=300)
+    profilepic = models.ImageField(upload_to='images/')   
 
 
 class Player(models.Model):
@@ -18,7 +17,7 @@ class Player(models.Model):
     motherName = models.CharField(max_length=50)
     skillName = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
-    profilePic = models.CharField(max_length=200)
+    profilepic = models.ImageField(upload_to='images/')
 
 
 class Content(models.Model):
@@ -27,7 +26,7 @@ class Content(models.Model):
     file = models.FileField(upload_to='videos/', null=True, verbose_name="")
     description = models.TextField()
     skillName = models.CharField(max_length=50)
-    view_count = models.IntegerField(default=0,null=True,blank=True)
+    view_count = models.IntegerField(default=0, null=True, blank=True)
 
 
 class Ratings(models.Model):
@@ -46,4 +45,4 @@ class Ratings(models.Model):
                                        )
 
     def __str__(self):
-        return self.content_rating.name     #recheck
+        return self.content_rating.name  # recheck

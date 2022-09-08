@@ -91,9 +91,7 @@ def add_content(request):
     if request.method == 'POST':
         form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
-            file = request.FILES['file']
-            #print(file.name)
-            # handle_uploaded_file(file)
+            form.save()
             return Response({
                 'status': True,
                 'message': 'successfully added',
