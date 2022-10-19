@@ -1,135 +1,72 @@
-from django.shortcuts import render
-from urllib import response
-import requests
-import json
-import os
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import CreatorSerializers, PlayerSerializers, ContentSerilizers
-from .models import Creator, Player, Content, Ratings
+from .serializers import (
+    CreatorSerializers, PlayerSerializers, SportSerializers, ContentSerilizers
+)
+from .models import Content, Creator, Player, Sport
 from django.http import JsonResponse
-from .forms import VideoForm
+from rest_framework import generics
+
+from .contractcalls import test_contract
+
+class CreatorView(generics.ListCreateAPIView):
+    queryset = Creator.objects.all()
+    serializer_class = CreatorSerializers
+   
 
 
-@api_view(['POST'])
-def add_creator(request):
-    try:
-        data = request.data
-        serializer = CreatorSerializers(data=data)
-        if serializer.is_valid():
-            # print(serializer.data)
-            serializer.save()
-            return Response({
-                'status': True,
-                'message': 'successfully added',
-                'data': serializer.data
-            })
-        return Response({
-            'status': False,
-            'message': 'invalid data',
-            'data': serializer.errors})
-    except Exception as e:
-        print(e)
+class CreatorDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Creator.objects.all()
+    serializer_class = CreatorSerializers
 
-    return Response({
-        'status': False,
-        'message': 'Something went wrong'
-    })
+#############################################
+class SportView(generics.ListCreateAPIView):
+    queryset = Sport.objects.all()
+    serializer_class = SportSerializers
+    def post(self, request, *args, **kwargs):
+        print(request.method)
+        test_contract()
+        return self.create(request, *args, **kwargs)
 
 
-@api_view(['GET'])
-def get_creator(request):
-    creator_objs = Creator.objects.all()
-    serializer = CreatorSerializers(creator_objs, many=True)
+class SportDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Sport.objects.all()
+    serializer_class = SportSerializers
+    def put(self, request, *args, **kwargs):
+        print(request.method)
+        test_contract()
+        return self.update(request, *args, **kwargs)
 
-    return Response({
-        'status': True,
-        'message': 'creator data fetched',
-        'data': serializer.data
-    })
+#############################################
+class PlayerView(generics.ListCreateAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayerSerializers
 
-
-@api_view(['POST'])
-def add_player(request):
-    try:
-        data = request.data
-        serializer = PlayerSerializers(data=data)
-        if serializer.is_valid():
-            # print(serializer.data)
-            serializer.save()
-            return Response({
-                'status': True,
-                'message': 'successfully added',
-                'data': serializer.data
-            })
-        return Response({
-            'status': False,
-            'message': 'invalid data',
-            'data': serializer.errors})
-    except Exception as e:
-        print(e)
-
-    return Response({
-        'status': False,
-        'message': 'Something went wrong'
-    })
+class PlayerViewFilter(generics.ListAPIView):
+    serializer_class = PlayerSerializers
+    def get_queryset(self):       
+        profileCreator = self.request.query_params.get('profileCreator')      
+        return Player.objects.filter(profileCreator=profileCreator)
 
 
-@api_view(['GET'])
-def get_player(request):
-    creator_objs = Player.objects.all()
-    serializer = CreatorSerializers(creator_objs, many=True)
+class PlayerDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayerSerializers
 
-    return Response({
-        'status': True,
-        'message': 'creator data fetched',
-        'data': serializer.data
-    })
+##############################################
+class ContentView(generics.ListCreateAPIView):
+    queryset = Content.objects.all()
+    serializer_class = ContentSerilizers
 
-@api_view(['POST'])
-def add_content(request):
-    if request.method == 'POST':
-        form = VideoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return Response({
-                'status': True,
-                'message': 'successfully added',
-                'data': form.data
-            })
-    else:
-        form = VideoForm()
-    return Response({
-        'status': False,
-        'message': 'Something went wrong'
-    })
+class ContentViewFilter(generics.ListAPIView):
+    serializer_class = ContentSerilizers
+    def get_queryset(self):       
+        contentCreator = self.request.query_params.get('contentCreator')      
+        return Content.objects.filter(contentCreator=contentCreator)
 
-@api_view(['POST'])
-def rate_content(request):
-    if request.method == 'POST':
-        el_id = request.POST.get('el_id')
-        val = request.POST.get('val')
-        print(val)
-        obj = Ratings.objects.get(id=el_id)
+class ContentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Content.objects.all()
+    serializer_class = ContentSerilizers
 
-        # storing_prev_rated_number = obj.rated_number
 
-        obj.rated_number = val
 
-        obj.count = obj.count + 1
-        store_count = obj.count
-        old_addition_values = obj.storing_prev_now_rated_value
-
-        obj.storing_prev_now_rated_value = int(old_addition_values) + int(val)
-
-        store_storing_prev_now_rated_value = obj.storing_prev_now_rated_value
-        print(store_storing_prev_now_rated_value)
-
-        obj.avg_rating = float(
-            store_storing_prev_now_rated_value // store_count)
-
-        j = obj.avg_rating
-        print(j)
-        obj.save()
-        return JsonResponse({'success': 'true', 'rated_number': val}, safe=False)
-    return JsonResponse({'success': 'false'})

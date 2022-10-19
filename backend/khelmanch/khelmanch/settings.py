@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure--h9q-+@hn3_i3dx%#-#n9t!i^cos^m+f=#itl9b#5bx1-ruiql
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -74,6 +75,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "khelmanch.wsgi.application"
+
+CORS_ALLOWED_ORIGINS = [
+    
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
 
 
 # Database

@@ -87,3 +87,18 @@ def upload_video(
         signed_tx.rawTransaction)
     w3.eth.wait_for_transaction_receipt(upload_video_tx_data)
     return True
+
+
+def test_contract(
+   
+):
+    print("Calling contract---------------------")
+    nonce = w3.eth.get_transaction_count(public_key)
+    upload_video_tx = myContract.functions.testContract(
+        ).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
+    signed_tx = w3.eth.account.sign_transaction(
+        upload_video_tx, private_key=private_key)
+    upload_video_tx_data = w3.eth.send_raw_transaction(
+        signed_tx.rawTransaction)
+    w3.eth.wait_for_transaction_receipt(upload_video_tx_data)
+    return True

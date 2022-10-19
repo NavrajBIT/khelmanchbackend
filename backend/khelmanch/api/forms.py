@@ -1,7 +1,8 @@
-from .models import Content
-from django import forms
+# from .models import Content
+# from django import forms
 
-class VideoForm(forms.ModelForm):
-    class Meta:
-        model= Content
-        fields= ["contentCreator", "name", "file", "description", "skillName"]
+
+# class VideoForm(forms.ModelForm):
+#     class Meta:
+#         model = Content
+#         fields = ["contentCreator", "name", "file", "sport"]

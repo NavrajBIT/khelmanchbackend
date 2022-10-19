@@ -4,10 +4,15 @@ from .views import *
 
 urlpatterns = [
     # path('', api, name='api'),
-    path('add-creator/', add_creator, name='add_creator'),
-    path('get-creator/', get_creator, name='get_creator'),
-    path('add-player/', add_player, name='add_player'),
-    path('get-player/', get_creator, name='get_player'),
-    path('rate-content/', add_content, name='add_content'),
-    path('add-content/', rate_content, name='rate_content')
+    path("creator", CreatorView.as_view()),
+    path("creator/<pk>", CreatorDetail.as_view()),
+    path("sport", SportView.as_view()),
+    path("sport/<int:pk>", SportDetail.as_view()),
+    path("player", PlayerView.as_view()),
+    path("playerfilter", PlayerViewFilter.as_view()),
+    path("player/<pk>", PlayerDetail.as_view()),
+    path("content", ContentView.as_view()),
+    path("contentfilter", ContentViewFilter.as_view()),
+    path("content/<int:pk>", ContentDetail.as_view()),
 ]
+
