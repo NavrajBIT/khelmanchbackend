@@ -1,5 +1,5 @@
 config = {
-    "contract_address": "0xabBb2D83DD303CCB7Bd65f66bBCc9b5b035c5268",
-    "public_key": "0x98Dc705baf20F1ACD9522Fb4fbdf48Ef1Dc91f8E",
-    "private_key": "92bfafe7893e38f548b722308adf1628e214ff8bec5afcf2a3ece8aca05bf2b5"
+    "contract_address": "0xAA5580C5c0a280393916325914698F344f81e034",
+    "public_key": "0xa1BD1774dc10A6Ab7b79aC61354a5f7216393104",
+    "private_key": "ff7a1858429140094987f976801b553cf4d5a7915f43cd17eb8826a8ad512552"
 }

@@ -1,55 +1,21 @@
 // SPDX-License-Identifier: MIT
+import "./Content.sol";
 
 pragma solidity 0.8.14;
 
-contract KhelManch {
-    uint256 public testvariable = 0;
-    uint256 public totalProfiles;
-    uint256 public totalContentCreators;
-    uint256 public contentId;
-
-    struct creator {
-        string name;
-        string description;
-        string profilepic;
-    }
-
-    struct player {
-        uint256 playerId;
-        address profileCreator;
-        string name;
-        string description;
-        uint256 age;
-        string gender;
-        string location;
-        string sport;
-        string profilepic;
-    }
-
-    struct content {
-        address creator;
-        uint256 playerId;
-        string name;
-        string file;
-        string sport;
-    }
-
-    mapping(address => creator) public playerToCreator;
-    mapping(uint256 => player) public playerIdToPlayer;
-    mapping(uint256 => content) public contentIdToContent;
+contract Admin {
+    KhelManch khelManch;
 
     uint256 public ownerCount;
     mapping(address => uint256) public ownerToOwnerId;
     uint256 public blockedOwnerCount;
     mapping(address => uint256) public blockedOwnerToOwnerId;
 
-    constructor() {
+    constructor(address _khelManch) {
         blockedOwnerCount = 0;
         ownerCount = 1;
         ownerToOwnerId[msg.sender] = ownerCount;
-        totalProfiles = 0;
-        totalContentCreators = 0;
-        contentId = 0;
+        khelManch = KhelManch(_khelManch);
     }
 
     modifier onlyOwner() {
@@ -76,15 +42,15 @@ contract KhelManch {
         blockedOwnerToOwnerId[_owner] = blockedOwnerCount;
     }
 
-    function addContentCreator(
+    function addCreator(
         string memory _name,
         string memory _description,
-        string memory _profilepic
+        string memory _profilePic
     ) public onlyOwner {
-        playerToCreator[msg.sender] = creator(_name, _description, _profilepic);
+        khelManch.addContentCreator(_name, _description, _profilePic);
     }
 
-    function addPlayer(
+    function addProfile(
         string memory _name,
         string memory _description,
         uint256 _age,
@@ -93,11 +59,7 @@ contract KhelManch {
         string memory _sport,
         string memory _profilepic
     ) public onlyOwner {
-        totalProfiles = totalProfiles + 1;
-        uint256 id = totalProfiles;
-        playerIdToPlayer[id] = player(
-            id,
-            msg.sender,
+        khelManch.addPlayer(
             _name,
             _description,
             _age,
@@ -108,24 +70,12 @@ contract KhelManch {
         );
     }
 
-    function addContent(
+    function uploadContent(
         uint256 _playerId,
         string memory _name,
         string memory _file,
         string memory _sport
     ) public onlyOwner {
-        contentId = contentId + 1;
-        uint256 id = contentId;
-        contentIdToContent[id] = content(
-            msg.sender,
-            _playerId,
-            _name,
-            _file,
-            _sport
-        );
-    }
-
-    function testContract() public {
-        testvariable = testvariable + 1;
+        khelManch.addContent(_playerId, _name, _file, _sport);
     }
 }

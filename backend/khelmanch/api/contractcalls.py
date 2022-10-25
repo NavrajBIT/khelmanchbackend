@@ -26,11 +26,11 @@ w3.middleware_onion.inject(geth_poa_middleware, layer=0)
 myContract = w3.eth.contract(address=contract_address, abi=abi)
 
 
-def add_creator(_userName, _profilepic):
+def add_creator(_userName, _description, _profilepic):
     print("Calling contract---------------------")
     nonce = w3.eth.get_transaction_count(public_key)
     add_creator_tx = myContract.functions.addCreator(
-        _userName, _profilepic).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
+        _userName, _description, _profilepic).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
     signed_tx = w3.eth.account.sign_transaction(
         add_creator_tx, private_key=private_key)
     add_creator_tx_data = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
@@ -38,29 +38,25 @@ def add_creator(_userName, _profilepic):
     return True
 
 
-def add_profile(
+def add_player(
     _name,
+    _description,
     _age,
     _gender,
-    _fatherName,
-    _motherName,
-    _address,
-    _imgHash,
-    _skillName,
-    _description
+    _location,
+    _sport,
+    _profilepic
 ):
     print("Calling contract---------------------")
     nonce = w3.eth.get_transaction_count(public_key)
-    add_profile_tx = myContract.functions.addClub(
+    add_profile_tx = myContract.functions.addProfile(
         _name,
+        _description,
         _age,
         _gender,
-        _fatherName,
-        _motherName,
-        _address,
-        _imgHash,
-        _skillName,
-        _description).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
+        _location,
+        _sport,
+        _profilepic).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
     signed_tx = w3.eth.account.sign_transaction(
         add_profile_tx, private_key=private_key)
     add_profile_tx_data = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
@@ -68,19 +64,19 @@ def add_profile(
     return True
 
 
-def upload_video(
-    _profileId,
-    _videoLink,
-    _description,
-    _skillName
+def upload_content(
+    _playerId,
+    _name,
+    _file,
+    _sport
 ):
     print("Calling contract---------------------")
     nonce = w3.eth.get_transaction_count(public_key)
-    upload_video_tx = myContract.functions.addClub(
-        _profileId,
-        _videoLink,
-        _description,
-        _skillName).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
+    upload_video_tx = myContract.functions.uploadContent(
+        _playerId,
+        _name,
+        _file,
+        _sport).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
     signed_tx = w3.eth.account.sign_transaction(
         upload_video_tx, private_key=private_key)
     upload_video_tx_data = w3.eth.send_raw_transaction(
@@ -90,12 +86,12 @@ def upload_video(
 
 
 def test_contract(
-   
+
 ):
     print("Calling contract---------------------")
     nonce = w3.eth.get_transaction_count(public_key)
     upload_video_tx = myContract.functions.testContract(
-        ).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
+    ).build_transaction({"from": public_key, "nonce": nonce, "gasPrice": 100000})
     signed_tx = w3.eth.account.sign_transaction(
         upload_video_tx, private_key=private_key)
     upload_video_tx_data = w3.eth.send_raw_transaction(

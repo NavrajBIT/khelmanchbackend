@@ -1,22 +1,24 @@
+import email
 from email.policy import default
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 def save_image(instance, *args, **kwargs):
-    try:    
+    try:
         return "/".join(["images", str(instance.playerid), "profile.png"])
     except:
         return "/".join(["images", str(instance.address), "profile.png"])
 
-def save_video(instance, filename, *args, **kwargs):   
+
+def save_video(instance, filename, *args, **kwargs):
     return "/".join(["videos", str(instance.id), filename])
 
 
 class Creator(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=500)
-    profilepic = models.ImageField(upload_to=save_image, default="profilepic.jpg")
+    profilepic = models.ImageField(
+        upload_to=save_image, default="profilepic.jpg")
     address = models.CharField(primary_key=True, max_length=50, unique=True)
     rating = models.FloatField(default=0.0)
 
@@ -34,7 +36,8 @@ class Player(models.Model):
     gender = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
     sport = models.ForeignKey(Sport, null=True, on_delete=models.SET_NULL)
-    profilepic = models.ImageField(upload_to=save_image, default="profilepic.jpg")
+    profilepic = models.ImageField(
+        upload_to=save_image, default="profilepic.jpg")
 
 
 class Content(models.Model):
@@ -46,3 +49,24 @@ class Content(models.Model):
     view_count = models.IntegerField(default=0, null=True, blank=True)
     rating = models.FloatField(default=0.0)
 
+
+class User(models.Model):
+    name = models.CharField(max_length=50)
+    email_id = models.CharField(max_length=25)
+    age = models.IntegerField()
+    gender = models.CharField(max_length=10)
+    profilepic = models.ImageField(
+        upload_to='images/', default="profilepic.jpg")
+
+
+class Comment(models.Model):
+    content = models.ForeignKey(
+        Content, on_delete=models.CASCADE, related_name='comments')
+    commentCreator = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(max_length=50)
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created']

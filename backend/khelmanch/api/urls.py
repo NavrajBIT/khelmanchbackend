@@ -14,5 +14,8 @@ urlpatterns = [
     path("content", ContentView.as_view()),
     path("contentfilter", ContentViewFilter.as_view()),
     path("content/<int:pk>", ContentDetail.as_view()),
+    path('users/', UserView.as_view()),
+    path('users/<int:pk>/', UserDetail.as_view()),
+    path('comments/', CommentView.as_view()),
+    path('comments/<int:pk>/', CommentDetail.as_view()),
 ]
-
